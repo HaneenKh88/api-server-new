@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/HaneenKh88/api-server-new#readme",
   "dependencies": {
+    "@code-fellows/supergoose": "^1.0.11",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

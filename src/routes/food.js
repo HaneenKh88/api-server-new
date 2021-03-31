@@ -1,8 +1,9 @@
 'use strict';
 const express = require('express');
 const validator = require('../middleware/validator');
-const Food = require('../models/food');
-const food = new Food();
+const foodMod = require('../models/food');
+const Food = require('../models/data-collection-class.js');
+const food = new Food(foodMod);
 const router = express.Router();
 
 router.get('/', getfood);
@@ -11,31 +12,53 @@ router.post('/', createfood);
 router.put('/:id', validator, updatefood);
 router.delete('/:id', validator, deletefood);
 // these are the Controller functions can be moved to /controllers/person.js
-function getfood(req, res) {
-  const resObj = food.read();
-  res.json(resObj);
+async function getfood(req, res, next) {
+  try {
+    const resObj = await food.read();
+    res.json(resObj);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function getfoodById(req, res) {
-  const resObj = food.read(req.params.id);
-  res.json(resObj);
+function getfoodById(req, res, next) {
+  food
+      .read(req.params.id)
+    .then((responseData) => {
+      res.json(responseData[0]);
+    })
+    .catch((error) => {
+      next(error);
+    });
 }
 
-function createfood(req, res) {
-  const personObject = req.body;
-  const resObj = food.create(personObject);
-  res.status(201).json(resObj);
+async function createfood(req, res) {
+  const foodObject = req.body;
+  try {
+    const resObj = await food.create(foodObject);
+    res.status(201).json(resObj);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
-function updatefood(req, res) {
-  const personObject = req.body;
-  const resObj = food.update(req.params.id, personObject);
-  res.json(resObj);
+async function updatefood(req, res, next) {
+  const foodObject = req.body;
+  try {
+    const resObj = await food.update(req.params.id, foodObject);
+    res.json(resObj);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function deletefood(req, res) {
-  const resObj = food.delete(req.params.id);
-  res.json(resObj);
+async function deletefood(req, res, next) {
+  try {
+    const resObj = await food.delete(req.params.id);
+    res.json(resObj);
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = router;

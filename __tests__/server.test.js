@@ -2,9 +2,12 @@
 
 'use strict';
 
+require('dotenv').config();
 const { server } = require('../src/server');
-const superTest  = require('supertest');
-const request = superTest(server);
+const supergoose = require('@code-fellows/supergoose'); 
+const request = supergoose(server);
+
+
 let id;
 
 describe('api server', () => {
@@ -13,8 +16,8 @@ describe('api server', () => {
       name: 'nodels',
     });
     expect(response.status).toEqual(201);
-    expect(response.body.data.name).toEqual('nodels');
-    id = response.body.id;
+    expect(response.body.name).toEqual('nodels');
+    id = response.body._id;
   });
 
   it('should get all the food on GET /food', async () => {
@@ -29,12 +32,12 @@ describe('api server', () => {
       name: 'rice',
     });
     expect(response.status).toEqual(200);
-    expect(response.body.data.name).toEqual('rice');
+    expect(response.body.name).toEqual('rice');
   });
   it('should be able to get a food on Get /food/:id', async () => {
     const response = await request.get(`/api/v1/food/${id}`);
     expect(response.status).toEqual(200);
-    expect(response.body.data.name).toEqual('rice');
+    expect(response.body.name).toEqual('rice');
   });
 
   it('handle server errors', async () => {
@@ -57,15 +60,14 @@ describe('api server', () => {
       name: 'shirt',
     });
     expect(response.status).toEqual(201);
-    expect(response.body.data.name).toEqual('shirt');
-    id = response.body.id;
+    expect(response.body.name).toEqual('shirt');
+    id = response.body._id;
   });
 
   it('should get all the clothes on GET /cloth', async () => {
-		const response = await request.get('/api/v1/cloth/');
+		const response = await request.get('/api/v1/cloth');
 		expect(response.status).toEqual(200);
 	});
-
 
   it('should be able to update a clothes on PUT /cloth', async () => {
     const response = await request.put(`/api/v1/cloth/${id}`).send({
@@ -73,12 +75,12 @@ describe('api server', () => {
       name: 'dress',
     });
     expect(response.status).toEqual(200);
-    expect(response.body.data.name).toEqual('dress');
+    expect(response.body.name).toEqual('dress');
   });
   it('should be able to get a clothes on Get /cloth/:id', async () => {
     const response = await request.get(`/api/v1/cloth/${id}`);
     expect(response.status).toEqual(200);
-    expect(response.body.data.name).toEqual('dress');
+    expect(response.body.name).toEqual('dress');
   });
 
   it('handle server errors', async () => {

@@ -1,4 +1,12 @@
-const app = require('./src/server')
+'use strict';
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-app.start(process.env.PORT)
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => {
+    require('./src/server.js').start(process.env.PORT);
+})
+.catch((error)=>{
+    console.log('error with connected',error.message)
+})
