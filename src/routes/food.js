@@ -11,7 +11,7 @@ router.get('/:id', validator, getfoodById);
 router.post('/', createfood);
 router.put('/:id', validator, updatefood);
 router.delete('/:id', validator, deletefood);
-// these are the Controller functions can be moved to /controllers/person.js
+
 async function getfood(req, res, next) {
   try {
     const resObj = await food.read();

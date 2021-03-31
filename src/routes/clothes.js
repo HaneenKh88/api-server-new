@@ -13,7 +13,7 @@ router.post('/', createclotes);
 router.put('/:id', validator, updateclothes);
 router.delete('/:id', validator, deleteclothes);
 
-// these are the Controller functions can be moved to /controllers/person.js
+
 async function getclothes(req, res, next) {
   try {
     const resObj = await cloth.read();
